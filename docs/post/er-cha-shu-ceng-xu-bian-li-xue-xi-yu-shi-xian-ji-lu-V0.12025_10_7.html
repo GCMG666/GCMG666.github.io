@@ -10,9 +10,15 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。">
+<meta name="description" content="这是我的第一篇日志，
+用来记录我的数据结构学习过程，
+希望借此回顾并巩固新知识点，
+同时锻炼我的观点输出能力。">
 <meta property="og:title" content="二叉树层序遍历学习与实现记录V0.12025_10_7">
-<meta property="og:description" content="这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。">
+<meta property="og:description" content="这是我的第一篇日志，
+用来记录我的数据结构学习过程，
+希望借此回顾并巩固新知识点，
+同时锻炼我的观点输出能力。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://GCMG666.github.io/post/er-cha-shu-ceng-xu-bian-li-xue-xi-yu-shi-xian-ji-lu-V0.12025_10_7.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -41,17 +47,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-.copy-feedback {
-    display: none;
-    position: absolute;
-    top: 10px;
-    right: 50px;
-    color: var(--color-fg-on-emphasis);
-    background-color: var(--color-fg-muted);
-    border-radius: 3px;
-    padding: 5px 8px;
-    font-size: 12px;
-}
+
 </style>
 
 
@@ -67,7 +63,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
         </svg>
     </a>
     
-    <a href="https://github.com/GCMG666/GCMG666.github.io/issues/4" target="_blank" class="btn btn-invisible circle" title="Issue">
+    <a href="https://github.com/GCMG666/GCMG666.github.io/issues/5" target="_blank" class="btn btn-invisible circle" title="Issue">
         <svg class="octicon" width="16" height="16">
             <path id="pathIssue" fill-rule="evenodd"></path>
         </svg>
@@ -83,27 +79,78 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。或许有一天我会把日志公开，不过可能得2，3年之后了，期间打磨我会不断打磨自己的能力。</p>
-<pre class="notranslate"><code class="notranslate"> 今天，我准备再次回顾二叉树中的层序遍历。首先，回顾主要知识点。
-  1.树的结点  树的结点由数据域和指针域构成  ，其中数据域存放相关信息，而指针域存放该父节点指向的左孩子与右孩子
-</code></pre>
-<p>如下图</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a725a32-7092-4ee6-b3d0-bf301962114e"><img width="267" height="151" alt="Image" src="https://github.com/user-attachments/assets/3a725a32-7092-4ee6-b3d0-bf301962114e" style="max-width: 100%; height: auto; max-height: 151px;"></a></p>
-<p>2.队列 与栈先进后出不同，队列的原则为先进先出，这为我们下文层序遍历提供了条件这里，先按下不表<br>
-队列的代码组成为数据域与指针域，在此我将采用循环队列的方式完成，首先定义结构体queue</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/89aa6aa6-7190-465c-96ca-db6472888211"><img width="273" height="176" alt="Image" src="https://github.com/user-attachments/assets/89aa6aa6-7190-465c-96ca-db6472888211" style="max-width: 100%; height: auto; max-height: 176px;"></a></p>
-<pre class="notranslate"><code class="notranslate">    其中的data即为数据域，用来存放树的结点，而通过指针front与rear的移动，达到删除和增添结点的效果
-</code></pre>
-<p>介绍完这些，接下来进入具体的操作过程<br>
-首先要遍历二叉树就要先创建二叉树，我们想到创建一个函数void creat_tree(tree_node**p,int x)</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ff08a5cb-f188-43b8-86c4-5a027efd02a8"><img width="519" height="174" alt="Image" src="https://github.com/user-attachments/assets/ff08a5cb-f188-43b8-86c4-5a027efd02a8" style="max-width: 100%; height: auto; max-height: 174px;"></a></p>
-<pre class="notranslate"><code class="notranslate">  其中p表示指向指向tree_node元素的指针的指针，x表示要传入的数据，可能这里会有点疑问：为什么不直接传入指向tree_node元素的指针呢，当时我也咋想咋想不通，与各个ai问了半天，最后我的理解为：因为我们操作的指针变了。如果在此传入一级指针，因为C语言函数为值传递，说以传入仅仅是一个副本，相当于仅仅在另一个时空改变了你想改变的指针，但函数执行完毕后对你原来想改变的东西没有丝毫影响，这样我们的疑问就可以解决。回到函数creat_tree我们要先为传入的指针分配空间，如果没有这一步那你就相当于立了块牌子，说这是我家准备施工，但后面根本没有空间可以施工。
-</code></pre>
-<p>接着，我们将要传入的数据传入该数节点的data中，再将（<em>node)-&gt;left,与（node</em>）-&gt;right设为空指针，等待下一步的赋值。<br>
-到此我们完成了creat-tree函数的构建，接下来便是传入数据，如下图</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2ba00034-8769-4efe-8b10-ae5083d2fc86"><img width="406" height="228" alt="Image" src="https://github.com/user-attachments/assets/2ba00034-8769-4efe-8b10-ae5083d2fc86" style="max-width: 100%; height: auto; max-height: 228px;"></a></p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1e2995f9-4540-4612-bfca-dca265c4c34b"><img src="https://github.com/user-attachments/assets/1e2995f9-4540-4612-bfca-dca265c4c34b" alt="Image" style="max-width: 100%;"></a></p>
-<p>今天先写到这里，之后有空我将继续完成剩余的队列遍历部分。</p></div>
+<div class="markdown-body" id="postBody"><p>这是我的第一篇日志，<br>
+用来记录我的数据结构学习过程，<br>
+希望借此回顾并巩固新知识点，<br>
+同时锻炼我的观点输出能力。<br>
+或许有一天我会把日志公开，<br>
+不过可能得 2、3 年之后了，<br>
+期间我会不断打磨自己的能力。</p>
+<hr>
+<p>今天，我准备再次回顾二叉树中的层序遍历。<br>
+首先，回顾主要知识点。</p>
+<ol>
+<li>树的结点<br>
+树的结点由数据域和指针域构成，<br>
+其中数据域存放相关信息，<br>
+而指针域存放该父节点指向的左孩子与右孩子。<br>
+如下图所示：</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9c2c0dfc-0b68-4a6a-8e51-246bc6dcbb94"><img width="267" height="151" alt="Image" src="https://github.com/user-attachments/assets/9c2c0dfc-0b68-4a6a-8e51-246bc6dcbb94" style="max-width: 100%; height: auto; max-height: 151px;"></a></p>
+<ol start="2">
+<li>队列<br>
+与栈先进后出不同，<br>
+队列的原则为先进先出，<br>
+这为我们下文层序遍历提供了条件，<br>
+这里先按下不表。<br>
+队列的代码组成为数据域与指针域，<br>
+在此我将采用循环队列的方式完成，<br>
+首先定义结构体 queue：</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/e7d9f194-161a-4220-9bc1-4080832c20b9"><img width="273" height="176" alt="Image" src="https://github.com/user-attachments/assets/e7d9f194-161a-4220-9bc1-4080832c20b9" style="max-width: 100%; height: auto; max-height: 176px;"></a></p>
+<p>其中的 data 即为数据域，<br>
+用来存放树的结点，<br>
+而通过指针 front 与 rear 的移动，<br>
+达到删除和增添结点的效果。</p>
+<p>介绍完这些，接下来进入具体的操作过程。</p>
+<p>首先要遍历二叉树就要先创建二叉树，<br>
+我们想到创建一个函数<br>
+void creat_tree(tree_node **p, int x)<br>
+如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8fa14f9e-94c6-46ad-af69-25389872e415"><img width="519" height="174" alt="Image" src="https://github.com/user-attachments/assets/8fa14f9e-94c6-46ad-af69-25389872e415" style="max-width: 100%; height: auto; max-height: 174px;"></a></p>
+<p>其中 p 表示指向 tree_node 元素指针的指针，<br>
+x 表示要传入的数据。</p>
+<p>可能这里会有点疑问：<br>
+为什么不直接传入指向 tree_node 元素的指针呢？<br>
+当时我也咋想咋想不通，<br>
+与各个 AI 问了半天，<br>
+最后我的理解为：<br>
+因为我们操作的指针变了。<br>
+如果传入一级指针，<br>
+由于 C 语言函数是值传递，<br>
+传入的仅仅是一个副本，<br>
+相当于在另一个时空改变了你想改变的指针，<br>
+但函数执行完毕后，<br>
+对原来想改变的东西没有丝毫影响，<br>
+这样疑问就可以解决。</p>
+<p>回到函数 creat_tree，<br>
+我们要先为传入的指针分配空间，<br>
+如果没有这一步，<br>
+那你就相当于立了块牌子，<br>
+说这是我家准备施工，<br>
+但后面根本没有空间可以施工。</p>
+<p>接着，我们将要传入的数据<br>
+传入该树节点的 data 中，<br>
+再将 (*node)-&gt;left 与 (*node)-&gt;right<br>
+设为空指针，<br>
+等待下一步的赋值。</p>
+<p>到此我们完成了 creat-tree 函数的构建，<br>
+接下来便是传入数据，<br>
+如下图所示：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/6ffa7cd2-bbce-4fa1-b7e1-7629acc80344"><img width="406" height="228" alt="Image" src="https://github.com/user-attachments/assets/6ffa7cd2-bbce-4fa1-b7e1-7629acc80344" style="max-width: 100%; height: auto; max-height: 228px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/cffbfeba-400a-45eb-887f-07d007f13a47"><img src="https://github.com/user-attachments/assets/cffbfeba-400a-45eb-887f-07d007f13a47" alt="Image" style="max-width: 100%;"></a></p>
+<p>今天先写到这里，<br>
+之后有空我将继续完成剩余的队列遍历部分。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
@@ -128,7 +175,7 @@ if(""!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -201,70 +248,7 @@ function iFrameLoading(){
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const createClipboardHTML = (codeContent, additionalClasses = '') => `
-        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
-        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
-            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
-                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
-                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
-            </clipboard-copy>
-            <div class="copy-feedback">Copied!</div>
-        </div>
-    `;
 
-    const handleCodeElements = (selector = '') => {
-        document.querySelectorAll(selector).forEach(codeElement => {
-            const codeContent = codeElement.innerHTML;
-            const newStructure = document.createElement('div');
-            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
-            newStructure.innerHTML = createClipboardHTML(codeContent);
-
-            const parentElement = codeElement.parentElement;
-            if (selector.includes('highlight')) {
-                parentElement.insertBefore(newStructure, codeElement.nextSibling);
-                parentElement.removeChild(codeElement);
-            } else {
-                parentElement.parentElement.replaceChild(newStructure, parentElement);
-            }
-        });
-    };
-
-    handleCodeElements('pre.notranslate > code.notranslate');
-    handleCodeElements('div.highlight > pre.notranslate');
-
-    let currentFeedback = null;
-    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
-        copyButton.addEventListener('click', () => {
-            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = codeContent;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
-
-            const copyIcon = copyButton.querySelector('.octicon-copy');
-            const checkIcon = copyButton.querySelector('.octicon-check');
-            const copyFeedback = copyButton.nextElementSibling;
-
-            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
-            currentFeedback = copyFeedback;
-
-            copyIcon.classList.add('d-none');
-            checkIcon.classList.remove('d-none');
-            copyFeedback.style.display = 'block';
-            copyButton.style.borderColor = 'var(--color-success-fg)';
-
-            setTimeout(() => {
-                copyIcon.classList.remove('d-none');
-                checkIcon.classList.add('d-none');
-                copyFeedback.style.display = 'none';
-                copyButton.style.borderColor = '';
-            }, 2000);
-        });
-    });
-});
 
 </script>
 
