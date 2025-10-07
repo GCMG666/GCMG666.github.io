@@ -10,9 +10,9 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="  这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。">
+<meta name="description" content="这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。">
 <meta property="og:title" content="二叉树层序遍历学习与实现记录V0.12025_10_7">
-<meta property="og:description" content="  这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。">
+<meta property="og:description" content="这是我的第一篇日志，由此记录我的数据结构学习过程，希望借此回顾并巩固新知识点，同时锻炼我的观点输出能力。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://GCMG666.github.io/post/er-cha-shu-ceng-xu-bian-li-xue-xi-yu-shi-xian-ji-lu-V0.12025_10_7.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -67,7 +67,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
         </svg>
     </a>
     
-    <a href="https://github.com/GCMG666/GCMG666.github.io/issues/3" target="_blank" class="btn btn-invisible circle" title="Issue">
+    <a href="https://github.com/GCMG666/GCMG666.github.io/issues/4" target="_blank" class="btn btn-invisible circle" title="Issue">
         <svg class="octicon" width="16" height="16">
             <path id="pathIssue" fill-rule="evenodd"></path>
         </svg>
@@ -88,21 +88,22 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
   1.树的结点  树的结点由数据域和指针域构成  ，其中数据域存放相关信息，而指针域存放该父节点指向的左孩子与右孩子
 </code></pre>
 <p>如下图</p>
-<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/dc3d96de-ed7f-40f4-bfc6-0883c937500a"><img width="267" height="151" alt="Image" src="https://github.com/user-attachments/assets/dc3d96de-ed7f-40f4-bfc6-0883c937500a" style="max-width: 100%; height: auto; max-height: 151px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/3a725a32-7092-4ee6-b3d0-bf301962114e"><img width="267" height="151" alt="Image" src="https://github.com/user-attachments/assets/3a725a32-7092-4ee6-b3d0-bf301962114e" style="max-width: 100%; height: auto; max-height: 151px;"></a></p>
 <p>2.队列 与栈先进后出不同，队列的原则为先进先出，这为我们下文层序遍历提供了条件这里，先按下不表<br>
 队列的代码组成为数据域与指针域，在此我将采用循环队列的方式完成，首先定义结构体queue</p>
-<p>图片</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/89aa6aa6-7190-465c-96ca-db6472888211"><img width="273" height="176" alt="Image" src="https://github.com/user-attachments/assets/89aa6aa6-7190-465c-96ca-db6472888211" style="max-width: 100%; height: auto; max-height: 176px;"></a></p>
 <pre class="notranslate"><code class="notranslate">    其中的data即为数据域，用来存放树的结点，而通过指针front与rear的移动，达到删除和增添结点的效果
 </code></pre>
 <p>介绍完这些，接下来进入具体的操作过程<br>
-首先要遍历二叉树就要先创建二叉树，我们想到创建一个函数void creat_tree(tree_node**p,int x)<br>
-图片<br>
-其中p表示指向指向tree_node元素的指针的指针，x表示要传入的数据，可能这里会有点疑问：为什么不直接传入指向tree_node元素的指针呢，当时我也咋想咋想不通，与各个ai问了半天，最后我的理解为：因为我们操作的指针变了。如果在此传入一级指针，因为C语言函数为值传递，说以传入仅仅是一个副本，相当于仅仅在另一个时空改变了你想改变的指针，但函数执行完毕后对你原来想改变的东西没有丝毫影响，这样我们的疑问就可以解决。回到函数creat_tree我们要先为传入的指针分配空间，如果没有这一步那你就相当于立了块牌子，说这是我家准备施工，但后面根本没有空间可以施工。<br>
-接着，我们将要传入的数据传入该数节点的data中，再将（<em>node)-&gt;left,与（node</em>）-&gt;right设为空指针，等待下一步的赋值。<br>
-到此我们完成了creat-tree函数的构建，接下来便是传入数据，如下图<br>
-图片<br>
-图片<br>
-今天先写到这里，之后有空我将继续完成剩余的队列遍历部分。</p></div>
+首先要遍历二叉树就要先创建二叉树，我们想到创建一个函数void creat_tree(tree_node**p,int x)</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ff08a5cb-f188-43b8-86c4-5a027efd02a8"><img width="519" height="174" alt="Image" src="https://github.com/user-attachments/assets/ff08a5cb-f188-43b8-86c4-5a027efd02a8" style="max-width: 100%; height: auto; max-height: 174px;"></a></p>
+<pre class="notranslate"><code class="notranslate">  其中p表示指向指向tree_node元素的指针的指针，x表示要传入的数据，可能这里会有点疑问：为什么不直接传入指向tree_node元素的指针呢，当时我也咋想咋想不通，与各个ai问了半天，最后我的理解为：因为我们操作的指针变了。如果在此传入一级指针，因为C语言函数为值传递，说以传入仅仅是一个副本，相当于仅仅在另一个时空改变了你想改变的指针，但函数执行完毕后对你原来想改变的东西没有丝毫影响，这样我们的疑问就可以解决。回到函数creat_tree我们要先为传入的指针分配空间，如果没有这一步那你就相当于立了块牌子，说这是我家准备施工，但后面根本没有空间可以施工。
+</code></pre>
+<p>接着，我们将要传入的数据传入该数节点的data中，再将（<em>node)-&gt;left,与（node</em>）-&gt;right设为空指针，等待下一步的赋值。<br>
+到此我们完成了creat-tree函数的构建，接下来便是传入数据，如下图</p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/2ba00034-8769-4efe-8b10-ae5083d2fc86"><img width="406" height="228" alt="Image" src="https://github.com/user-attachments/assets/2ba00034-8769-4efe-8b10-ae5083d2fc86" style="max-width: 100%; height: auto; max-height: 228px;"></a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/1e2995f9-4540-4612-bfca-dca265c4c34b"><img src="https://github.com/user-attachments/assets/1e2995f9-4540-4612-bfca-dca265c4c34b" alt="Image" style="max-width: 100%;"></a></p>
+<p>今天先写到这里，之后有空我将继续完成剩余的队列遍历部分。</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
