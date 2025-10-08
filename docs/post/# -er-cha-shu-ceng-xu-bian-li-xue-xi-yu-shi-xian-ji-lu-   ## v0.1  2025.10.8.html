@@ -12,19 +12,11 @@
     </script>
 <meta name="description" content="1. > ***导言***
    >
-   > 这是我写的第二篇博客，同时我也迎来了国庆最后一天的假期，又要早八了:sweat:，今天开始尝试用markdowm完成剩余代码的见解与说明，我感觉比较高级
-   >
-   > * 引入 
-   >
-   > * 层序遍历是一种广度优先的遍历方式，它按照树的层次，从上到下、从左到右依次访问每个节点。">
+   > 这是我写的第二篇博客，同时我也迎来了国庆最后一天的假期，又要早八了:sweat:，今天开始尝试用Markdowm完成剩余代码的见解与说明。">
 <meta property="og:title" content="# 二叉树层序遍历学习与实现记录   ## v0.1  2025.10.8">
 <meta property="og:description" content="1. > ***导言***
    >
-   > 这是我写的第二篇博客，同时我也迎来了国庆最后一天的假期，又要早八了:sweat:，今天开始尝试用markdowm完成剩余代码的见解与说明，我感觉比较高级
-   >
-   > * 引入 
-   >
-   > * 层序遍历是一种广度优先的遍历方式，它按照树的层次，从上到下、从左到右依次访问每个节点。">
+   > 这是我写的第二篇博客，同时我也迎来了国庆最后一天的假期，又要早八了:sweat:，今天开始尝试用Markdowm完成剩余代码的见解与说明。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://GCMG666.github.io/post/%23%20-er-cha-shu-ceng-xu-bian-li-xue-xi-yu-shi-xian-ji-lu-%20%20%20%23%23%20v0.1%20%202025.10.8.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
@@ -79,7 +71,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
         </svg>
     </a>
     
-    <a href="https://github.com/GCMG666/GCMG666.github.io/issues/6" target="_blank" class="btn btn-invisible circle" title="Issue">
+    <a href="https://github.com/GCMG666/GCMG666.github.io/issues/7" target="_blank" class="btn btn-invisible circle" title="Issue">
         <svg class="octicon" width="16" height="16">
             <path id="pathIssue" fill-rule="evenodd"></path>
         </svg>
@@ -99,7 +91,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li>
 <blockquote>
 <p><em><strong>导言</strong></em></p>
-<p>这是我写的第二篇博客，同时我也迎来了国庆最后一天的假期，又要早八了:sweat:，今天开始尝试用markdowm完成剩余代码的见解与说明，我感觉比较高级</p>
+<p>这是我写的第二篇博客，同时我也迎来了国庆最后一天的假期，又要早八了:sweat:，今天开始尝试用Markdowm完成剩余代码的见解与说明。</p>
 <ul>
 <li>
 <p>引入</p>
@@ -126,7 +118,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 
 <span class="pl-k">struct</span> <span class="pl-smi">queue</span>
 {
-    <span class="pl-k">struct</span> <span class="pl-smi">tree_node</span> <span class="pl-c1">data</span>[<span class="pl-s1">max</span>];
+    <span class="pl-k">struct</span> <span class="pl-smi">tree_node</span><span class="pl-c1">*</span><span class="pl-c1">data</span>[<span class="pl-s1">max</span>];
     <span class="pl-smi">int</span> <span class="pl-c1">front</span>;
     <span class="pl-smi">int</span> <span class="pl-c1">rear</span>;
 }；</pre></div>
@@ -167,6 +159,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 }</pre></div>
 <ol start="3">
 <li>
+<p><em><strong>判断queue是否为空</strong></em></p>
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-smi">int</span> <span class="pl-en">is_empty</span>(<span class="pl-smi">queue</span><span class="pl-c1">*</span><span class="pl-s1">p</span>)
+{
+    <span class="pl-k">if</span>((<span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">front</span><span class="pl-c1">+</span><span class="pl-c1">1</span>)%<span class="pl-s1">max</span><span class="pl-c1">==</span><span class="pl-s1">rear</span>)
+    {
+        <span class="pl-k">return</span> <span class="pl-c1">1</span>;
+    }
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}</pre></div>
+</li>
+<li>
 <p><em><strong>构建主函数</strong></em></p>
 <p><em>完成了树与队列的构建，准备工作就已经完成了，接下来便是主函数的构建</em></p>
 </li>
@@ -175,7 +178,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 {
     ....
         <span class="pl-en">enter_queue</span>(<span class="pl-s1">p</span>,<span class="pl-s1">root</span>);
-    <span class="pl-k">while</span>(!<span class="pl-en">is_full</span>(<span class="pl-s1">p</span>))<span class="pl-c">//如果队列不为空，便一直循环</span>
+    <span class="pl-k">while</span>(!<span class="pl-en">is_empty</span>(<span class="pl-s1">p</span>))<span class="pl-c">//如果队列不为空，便一直循环</span>
     {
         <span class="pl-smi">tree_node</span><span class="pl-c1">*</span> <span class="pl-s1">current_node</span><span class="pl-c1">=</span><span class="pl-en">dequeue</span>(<span class="pl-s1">p</span>);<span class="pl-c">//将顶层的元素出队并记录</span>
         <span class="pl-en">printf</span>(<span class="pl-s">"%d"</span>,<span class="pl-s1">current</span>——<span class="pl-s1">node</span><span class="pl-c1">-&gt;</span><span class="pl-c1">data</span>);<span class="pl-c">//打印顶层元素</span>
@@ -202,7 +205,11 @@ D  E   F
 <p><em>然后再用B重复A的行为</em></p>
 <p><em>因为先入先出B之后便是C</em></p>
 <p><em>C再次重复A的行为</em></p>
-<p><em>以此类推 我们就打印了一层层元素</em></p></div>
+<p><em>以此类推 我们就打印了一层层元素</em></p>
+<hr>
+<p><em>那么到此代码的总体思路便完成了，可能有些缺陷，但我已经尽力了</em></p>
+<p><em>接下来我可能写一些历年考研数据结构代码题，一周至少写一题</em></p>
+<p><em><strong>有什么缺点，可以告诉我改正！</strong></em></p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
