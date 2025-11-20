@@ -21,7 +21,7 @@
 <meta property="og:url" content="https://GCMG666.github.io/post/%23%20-er-cha-shu-ceng-xu-bian-li-xue-xi-yu-shi-xian-ji-lu-%20%20%20%23%23%20v0.1%20%202025.10.8.html">
 <meta property="og:image" content="https://github.githubassets.com/favicons/favicon.svg">
 <title># 二叉树层序遍历学习与实现记录   ## v0.1  2025.10.8</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -114,32 +114,29 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p><em><strong>队列的完善</strong></em></p>
 </blockquote>
 <p>上篇文章中我们完成了<em><strong>二叉树的构建</strong></em>，接下来便可以来到第二部分 <em>队列代码的实现</em></p>
-<pre lang="c" class="notranslate"><code class="notranslate">#define max 100
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-k">#define</span> <span class="pl-s1">max</span> 100
 
-struct queue
+<span class="pl-k">struct</span> <span class="pl-smi">queue</span>
 {
-    struct tree_node*data[max];
-    int front;
-    int rear;
-}；
-</code></pre>
+    <span class="pl-k">struct</span> <span class="pl-smi">tree_node</span><span class="pl-c1">*</span><span class="pl-c1">data</span>[<span class="pl-s1">max</span>];
+    <span class="pl-smi">int</span> <span class="pl-c1">front</span>;
+    <span class="pl-smi">int</span> <span class="pl-c1">rear</span>;
+}；</pre></div>
 <ul>
 <li><em><strong>创建与初始化</strong></em></li>
 </ul>
 <p><em>构建一个队列</em></p>
-<pre lang="c" class="notranslate"><code class="notranslate">#include&lt;stdlib&gt;
-int main(){
-    queue*p=(queue*)malloc(sizeof(queue));
-    void queue_init(p);
-}
-</code></pre>
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-k">#include</span><span class="pl-s">&lt;stdlib&gt;</span>
+<span class="pl-smi">int</span> <span class="pl-en">main</span>(){
+    <span class="pl-smi">queue</span><span class="pl-c1">*</span><span class="pl-s1">p</span><span class="pl-c1">=</span>(<span class="pl-smi">queue</span><span class="pl-c1">*</span>)<span class="pl-en">malloc</span>(<span class="pl-k">sizeof</span>(<span class="pl-s1">queue</span>));
+    <span class="pl-smi">void</span> <span class="pl-en">queue_init</span>(<span class="pl-smi">p</span>);
+}</pre></div>
 <p><em>初始化</em></p>
-<pre lang="c" class="notranslate"><code class="notranslate">void queue_init(queue*p)
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-smi">void</span> <span class="pl-en">queue_init</span>(<span class="pl-smi">queue</span><span class="pl-c1">*</span><span class="pl-s1">p</span>)
 {
-    p-&gt;front=0;
-    p-&gt;rear=0;
-}
-</code></pre>
+    <span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">front</span><span class="pl-c1">=</span><span class="pl-c1">0</span>;
+    <span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">rear</span><span class="pl-c1">=</span><span class="pl-c1">0</span>;
+}</pre></div>
 <p><em>让 front 与rear 同时指向首元素位置，为我们后续移动确定起点</em></p>
 <ul>
 <li><em><strong>入队与出队</strong></em></li>
@@ -147,58 +144,54 @@ int main(){
 <p><em>有了一个队列接下来便要考虑如何将二叉差树中的元素录入</em></p>
 <p><em>构建函数enter_queue与dequeue</em></p>
 <p><em>其中dequeue并不是简单的出队，还需要返回出队的元素</em></p>
-<pre lang="c" class="notranslate"><code class="notranslate">void enter_queue(queue*p,tree_node*root)//这里只用传递一级指针，因为我们并不用改变该一级指针
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-smi">void</span> <span class="pl-en">enter_queue</span>(<span class="pl-smi">queue</span><span class="pl-c1">*</span><span class="pl-s1">p</span>,<span class="pl-smi">tree_node</span><span class="pl-c1">*</span><span class="pl-s1">root</span>)<span class="pl-c">//这里只用传递一级指针，因为我们并不用改变该一级指针</span>
 {
-    p-&gt;data[p-&gt;rear]=root;
-    p-&gt;rear=(p-&gt;rear+1)%100;
-}
-</code></pre>
+    <span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">data</span>[<span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">rear</span>]<span class="pl-c1">=</span><span class="pl-s1">root</span>;
+    <span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">rear</span><span class="pl-c1">=</span>(<span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">rear</span><span class="pl-c1">+</span><span class="pl-c1">1</span>)%<span class="pl-c1">100</span>;
+}</pre></div>
 </li>
 </ol>
-<pre lang="c" class="notranslate"><code class="notranslate">tree_node* dequeue (queue*p)
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-smi">tree_node</span><span class="pl-c1">*</span> <span class="pl-en">dequeue</span> (<span class="pl-smi">queue</span><span class="pl-c1">*</span><span class="pl-s1">p</span>)
 {
-    tree_node*mark=p-&gt;data[p-&gt;front];
-    p-&gt;front=(p-&gt;front+1)%100;
-    return mark;
-}
-</code></pre>
+    <span class="pl-smi">tree_node</span><span class="pl-c1">*</span><span class="pl-s1">mark</span><span class="pl-c1">=</span><span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">data</span>[<span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">front</span>];
+    <span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">front</span><span class="pl-c1">=</span>(<span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">front</span><span class="pl-c1">+</span><span class="pl-c1">1</span>)%<span class="pl-c1">100</span>;
+    <span class="pl-k">return</span> <span class="pl-s1">mark</span>;
+}</pre></div>
 <ol start="3">
 <li>
 <p><em><strong>判断queue是否为空</strong></em></p>
-<pre lang="c" class="notranslate"><code class="notranslate">int is_empty(queue*p)
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-smi">int</span> <span class="pl-en">is_empty</span>(<span class="pl-smi">queue</span><span class="pl-c1">*</span><span class="pl-s1">p</span>)
 {
-    if((p-&gt;front+1)%max==rear)
+    <span class="pl-k">if</span>((<span class="pl-s1">p</span><span class="pl-c1">-&gt;</span><span class="pl-c1">front</span><span class="pl-c1">+</span><span class="pl-c1">1</span>)%<span class="pl-s1">max</span><span class="pl-c1">==</span><span class="pl-s1">rear</span>)
     {
-        return 1;
+        <span class="pl-k">return</span> <span class="pl-c1">1</span>;
     }
-    return 0;
-}
-</code></pre>
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}</pre></div>
 </li>
 <li>
 <p><em><strong>构建主函数</strong></em></p>
 <p><em>完成了树与队列的构建，准备工作就已经完成了，接下来便是主函数的构建</em></p>
 </li>
 </ol>
-<pre lang="c" class="notranslate"><code class="notranslate">int main()
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-smi">int</span> <span class="pl-en">main</span>()
 {
     ....
-        enter_queue(p,root);
-    while(!is_empty(p))//如果队列不为空，便一直循环
+        <span class="pl-en">enter_queue</span>(<span class="pl-s1">p</span>,<span class="pl-s1">root</span>);
+    <span class="pl-k">while</span>(!<span class="pl-en">is_empty</span>(<span class="pl-s1">p</span>))<span class="pl-c">//如果队列不为空，便一直循环</span>
     {
-        tree_node* current_node=dequeue(p);//将顶层的元素出队并记录
-        printf("%d",current——node-&gt;data);//打印顶层元素
-        if(current-&gt;left!=NULL)
+        <span class="pl-smi">tree_node</span><span class="pl-c1">*</span> <span class="pl-s1">current_node</span><span class="pl-c1">=</span><span class="pl-en">dequeue</span>(<span class="pl-s1">p</span>);<span class="pl-c">//将顶层的元素出队并记录</span>
+        <span class="pl-en">printf</span>(<span class="pl-s">"%d"</span>,<span class="pl-s1">current</span>——<span class="pl-s1">node</span><span class="pl-c1">-&gt;</span><span class="pl-c1">data</span>);<span class="pl-c">//打印顶层元素</span>
+        <span class="pl-k">if</span>(<span class="pl-s1">current</span><span class="pl-c1">-&gt;</span><span class="pl-c1">left</span><span class="pl-c1">!=</span><span class="pl-c1">NULL</span>)
         {
-            enter_queue(p,current_node-&gt;left);//如果存在左孩子，便将该出队元素的左孩子入队，也就是下一层元素
+            <span class="pl-en">enter_queue</span>(<span class="pl-s1">p</span>,<span class="pl-s1">current_node</span><span class="pl-c1">-&gt;</span><span class="pl-c1">left</span>);<span class="pl-c">//如果存在左孩子，便将该出队元素的左孩子入队，也就是下一层元素</span>
         }
-        if(current-&gt;right!=NULL)
+        <span class="pl-k">if</span>(<span class="pl-s1">current</span><span class="pl-c1">-&gt;</span><span class="pl-c1">right</span><span class="pl-c1">!=</span><span class="pl-c1">NULL</span>)
         {
-            enter_queue(p,current_node-&gt;right);//如果存在右孩子，便将该出队元素的右孩子入队
+            <span class="pl-en">enter_queue</span>(<span class="pl-s1">p</span>,<span class="pl-s1">current_node</span><span class="pl-c1">-&gt;</span><span class="pl-c1">right</span>);<span class="pl-c">//如果存在右孩子，便将该出队元素的右孩子入队</span>
         }
     }
-}
-</code></pre>
+}</pre></div>
 <p><em><strong>接下来我来手动遍历以更好理解</strong></em></p>
 <pre class="notranslate"><code class="notranslate">    A
    / \
